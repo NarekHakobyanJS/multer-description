@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h1>Users</h1>
+  <form action="/users" method="post" enctype="multipart/form-data">
+    <input type="text" name="name" placeholder="name">
+    <input type="text" name="email" placeholder="email">
+    <input type="text" name="password" placeholder="password">
+    <input type="text" name="confirmPassword" placeholder="confirmPassword">
+    <input type="file" name="avatar"/>
+    <button>register</button>
+  </form>
+  <ul>
+    <% users.forEach((user)=> { %>
+      <li>
+        <h2>
+          <%=user.name %>
+        </h2>
+        <h3>
+          <%=user.email %>
+        </h3>
+        <button data-action="edit" id='<%=user._id%>'>edit</button>
+        <button data-action="delete" id='<%=user._id%>'>X</button>
+      </li>
+      <% }) %>
+  </ul>
+  <script src="./js/index.js"></script>
+</body>
+
+</html>

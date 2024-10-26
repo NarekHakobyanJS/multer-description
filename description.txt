@@ -1,0 +1,66 @@
+multer pacage նախատեսված է ֆայլեր 
+Նկարներ ստանալու և մշակելու համար
+express-ում: 
+
+//1 Քայլ պետքա գրվի հատուկ կոդ
+<form action="/profile" method="post" enctype="multipart/form-data">
+  <input type="file" name="avatar" />
+</form>
+
+//2 uploads անունով թղթապանակ պետքա ստեղծվի որ ֆայլերը դրա մեջ պահվի
+
+//3 multer-ը express-ին միացնելու կոդը
+
+diskStorage Ֆունկցիան ստանում է որպես արգումենտ Օբյեկտ 
+այդ Օբյեկտի մեջ կա երկու Ֆունկցիա
+        1-destination Ֆունկցիան նախատեսված է
+        նկարը պահպանելու համար Պապկայի ճանապարհը 
+        ստեղծելու համար
+        2-filename ֆունկցիան սարքում է նկարի անունը
+
+
+        upload ունի անունով single միդլվայեր որը միացնում ենք route-ին
+        և նրան որպես արգումենտ տալիսենք ֆայլի անունը որը գրված է UI input դաշտում
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
+  }
+})
+
+const upload = multer({ storage: storage })
+
+app.post('/stats', upload.single('fileName'), function (req, res) {});
+
+//////////////////////////////////////////
+4 Չմոռանանք ԴԲ ում ավելացնել Մոդելին, նկարի դաշտը որպես String
+
+//////////////////////////////////////////
+5 Նկարի անունը ստեղծելուց պետք է չմոռանանք նաև իրա վերջավորությունը տալու jpg png :
+    Եվ դրա համար մոդուլի extname ֆունկցիան կօգտագործենք
+    կօգտագործենք տալով նրա file.originalname
+
+filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname))
+    }
+
+6 Այս ամենը ճիշտ անելուց հետո route-ի մեջ որպես req.file կնգնի մեր ֆայլը 
+
+// Հիմա եթե route-um console.log(req.file) անենք կտենանք հետևյալ երեվույթը 
+{
+  fieldname: 'avatar',
+  originalname: 'middlware.png',
+  encoding: '7bit',
+  mimetype: 'image/png',
+  destination: 'uploads',
+  filename: 'avatar-1729949307086-346780669.png',
+  path: 'uploads/avatar-1729949307086-346780669.png',
+  size: 413642
+}
+
+//contolers ում դուրս կհանենք filename և կուղարկենք services-ի մեջ
