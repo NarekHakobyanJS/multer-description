@@ -64,3 +64,6 @@ filename: function (req, file, cb) {
 }
 
 //contolers ում դուրս կհանենք filename և կուղարկենք services-ի մեջ
+
+// UI-ում ցույց տալու համար express.static ին պետքա միացնենք մեր uploads պապկեն
+app.use(express.static(path.join(__dirname, 'uploads')))
